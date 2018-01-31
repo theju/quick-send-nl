@@ -1,0 +1,50 @@
+<div class="row header">{% load i18n %}
+    {% url "upload_csv" as upload_csv_url %}
+    {% url "compose_message" as compose_message_url %}
+    {% url "pick_send_mode" as pick_send_mode_url %}
+    {% url "confirm_send" as confirm_send_url %}
+    <div class="col-3 {% if request.path == upload_csv_url %}active{% else %}disabled{% endif %}">
+        {% if request.path == upload_csv_url or request.session.csv %}
+        <a href="{{ upload_csv_url }}">
+            <h3>{% trans "Step 1" %}</h3>
+            <small>{% trans "Upload CSV" %}</small>
+        </a>
+        {% else %}
+        <h3>{% trans "Step 1" %}</h3>
+        <small>{% trans "Upload CSV" %}</small>
+        {% endif %}
+    </div>
+    <div class="col-3 {% if request.path == compose_message_url %}active{% else %}disabled{% endif %}">
+        {% if request.path == compose_message_url or request.session.compose %}
+        <a href="{{ compose_message_url }}">
+            <h3>{% trans "Step 2" %}</h3>
+            <small>{% trans "Compose Message" %}</small>
+        </a>
+        {% else %}
+        <h3>{% trans "Step 2" %}</h3>
+        <small>{% trans "Compose Message" %}</small>
+        {% endif %}
+    </div>
+    <div class="col-3 {% if request.path == pick_send_mode_url %}active{% else %}disabled{% endif %}">
+        {% if request.path == pick_send_mode_url or request.session.mode %}
+        <a href="{{ pick_send_mode_url }}">
+            <h3>{% trans "Step 3" %}</h3>
+            <small>{% trans "SMTP Details" %}</small>
+        </a>
+        {% else %}
+        <h3>{% trans "Step 3" %}</h3>
+        <small>{% trans "SMTP Details" %}</small>
+        {% endif %}
+    </div>
+    <div class="col-3 {% if request.path == confirm_send_url %}active{% else %}disabled{% endif %}">
+        {% if request.path == confirm_send_url or request.session.confirm_viewed %}
+        <a href="{{ confirm_send_url }}">
+            <h3>{% trans "Step 4" %}</h3>
+            <small>{% trans "Send" %}</small>
+        </a>
+        {% else %}
+        <h3>{% trans "Step 4" %}</h3>
+        <small>{% trans "Confirm" %}</small>
+        {% endif %}
+    </div>
+</div>

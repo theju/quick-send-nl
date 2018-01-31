@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Step 1: Upload CSV" %}{% endblock %}
+
+{% block content %}
+{% include "header.html" %}
+
+<div class="upload_csv_container">
+    <h1 class="display-6 text-center">{% trans "Upload CSV" %}</h1>
+    <h3>{% trans "Note" %}</h3>
+    <ul>
+        <li>{% blocktrans %}CSV files upto 2.5MB are supported{% endblocktrans %}</li>
+        <li>{% blocktrans %}The first line of the CSV file must contain a header{% endblocktrans %}</li>
+        <li>{% blocktrans %}Email column headers are converted to lowercase and spaces and/or hyphens (-) in them are replaced with underscores (_){% endblocktrans %}</li>
+        <li>{% blocktrans %}The email column header must be one of "email", "Email", "e-mail" or "E-mail"{% endblocktrans %}</li>
+        <li>{% blocktrans %}The additional columns in the CSV file are available while composing the message (Step 2) and are passed as template variables{% endblocktrans %}</li>
+        <li>{% blocktrans %}All user uploaded data is deleted as soon as the emails are sent out. No information is retained.{% endblocktrans %}</li>
+    </ul>
+    <form method="post" action="{% url "upload_csv" %}" enctype="multipart/form-data" class="needs-validation {% if form.errors %}was-validated{% endif %}">{% csrf_token %}
+        <div class="col-md-12 mb-3">
+            <label for="csvFile"><strong>{% trans "Upload CSV File" %}</strong></label>
+            <input type="file" class="form-control" id="csvFile" required="" name="csv_file">
+            <div class="invalid-feedback">
+                {% if form.errors %}{{ form.errors.csv_file }}{% else %}{% trans "A CSV file is required" %}{% endif %}
+            </div>
+        </div>
+        <p><input type="submit" value="{% trans "Next" %} &gt;&gt;" class="btn btn-primary btn-lg btn-block" /></p>
+    </form>
+</div>
+{% endblock %}

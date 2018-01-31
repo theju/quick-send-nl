@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Status" %}{% endblock %}
+
+{% block content %}
+{% include "header.html" %}
+
+<div class="status_container">
+    <h1 class="display-6 text-center">{% trans "Status" %}</h1>
+
+    <div class="status">
+        {% if not status %}
+        {% trans "Click refresh to view status" %}
+        {% else %}
+        {{ status }}
+        {% endif %}
+    </div>
+    {% if done %}
+    <a href="{% url "upload_csv" %}" class="btn btn-primary btn-lg btn-block">{% trans "Start another campaign" %}</a>
+    {% else %}
+    <a href="javascript:window.location.reload()" class="btn btn-primary btn-lg btn-block">{% trans "Refresh" %}</a>
+    {% endif %}
+</div>
+{% endblock %}

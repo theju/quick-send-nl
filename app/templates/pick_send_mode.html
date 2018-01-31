@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Step 3: SMTP Details" %}{% endblock %}
+
+{% block content %}
+{% include "header.html" %}
+
+<div class="pick_send_mode_container">
+    <h1 class="display-6 text-center">{% trans "SMTP Details" %}</h1>
+    <div class="row">
+        <h3 class="w-100 text-center">{% trans "Pick one of the modes below to send an email" %}</h3>
+    </div>
+    <div class="row">
+        <p class="w-100"><a href="javascript:void(0)" class="smtp_link btn btn-primary btn-lg btn-block">{% trans "SMTP" %}</a></p>
+
+        <form method="post" action="{% url "pick_send_mode" %}" class="needs-validation smtp w-100" hidden>{% csrf_token %}
+            <input type="hidden" name="mode" value="smtp" />
+            <div class="col-md-12 mb-3">
+                <label for="host"><strong>{% trans "Host" %}</strong></label>
+                <input type="text" class="form-control" id="host" required="" placeholder="SMTP Hostname" name="host" value="{% if form.host.value %}{{ form.host.value }}{% endif %}">
+                <div class="invalid-feedback">
+                    {% trans "A host is required" %}
+                </div>
+            </div>
+            <div class="col-md-12 mb-3">
+                <label for="port"><strong>{% trans "Port" %}</strong></label>
+                <input type="number" class="form-control" id="port" required="" placeholder="SMTP Port" name="port" value="{% if form.port.value %}{{ form.port.value }}{% endif %}">
+                <div class="invalid-feedback">
+                    {% trans "A port is required" %}
+                </div>
+            </div>
+            <div class="col-md-12 mb-3">
+                <label for="username"><strong>{% trans "Username" %}</strong></label>
+                <input type="text" class="form-control" id="username" required="" placeholder="SMTP Username" name="username" value="{% if form.username.value %}{{ form.username.value }}{% endif %}">
+                <div class="invalid-feedback">
+                    {% trans "A username is required" %}
+                </div>
+            </div>
+            <div class="col-md-12 mb-3">
+                <label for="password"><strong>{% trans "Password" %}</strong></label>
+                <input type="password" class="form-control" id="password" required="" placeholder="SMTP Password" name="password" value="{% if form.password.value %}{{ form.password.value }}{% endif %}">
+                <div class="invalid-feedback">
+                    {% trans "A password is required" %}
+                </div>
+            </div>
+            <div class="col-md-12 mb-3">
+                <input type="checkbox" id="use_tls" required="" name="use_tls" checked="checked" />
+                <label for="use_tls"><strong>{% trans "Use TLS" %}</strong></label>
+            </div>
+            <p><input type="submit" value="{% trans "Next" %} &gt;&gt;" class="btn btn-primary btn-lg btn-block" /></p>
+        </form>
+    </div>
+    {% if google_oauth_link %}
+    <div class="row">
+        <p class="w-100 text-center">
+            <a href="{{ google_oauth_link }}" class="google_oauth_link btn btn-primary btn-lg btn-block">{% trans "Google OAuth" %}</a>
+            <small class="bg-info">Will redirect you to Google for authorization to send email on your behalf</small>
+        </p>
+
+        <form action="{% url "pick_send_mode" %}" method="post" class="needs-validation" hidden>
+            <input type="hidden" name="mode" value="google" />
+            <input type="hidden" value="{{ google_oauth_token }}" required="" />
+            <div class="invalid-feedback">
+                {% trans "Google OAuth validation failed" %}
+            </div>
+            <p><input type="submit" value="{% trans "Next" %} &gt;&gt;" class="btn btn-primary btn-lg btn-block" /></p>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+ (function() {
+     document.querySelector(".smtp_link").addEventListener("click", function() {
+         var smtpForm = document.querySelector("form.smtp");
+         if (smtpForm.hasAttribute("hidden")) {
+             smtpForm.removeAttribute("hidden");
+         } else {
+             smtpForm.setAttribute("hidden", "");
+         }
+     });
+ })();
+</script>
+{% endblock %}

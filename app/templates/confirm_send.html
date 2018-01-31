@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Step 4: Confirm" %}{% endblock %}
+
+{% block content %}
+{% include "header.html" %}
+
+<div class="confirm_send_container">
+    <h1 class="display-6 text-center">{% trans "Confirm" %}</h1>
+
+    <section class="csv">
+        <h3 class="w-100 text-center">{% trans "CSV" %}</h3>
+        {% if total_rows %}<p>{% blocktrans %}{{ total_rows }} emails to be sent{% endblocktrans %}</p>{% endif %}
+    </section>
+
+    <section class="message">
+        <h3 class="w-100 text-center">{% trans "Message" %}</h3>
+        <h5 class="w-100 text-center">{% trans "Preview for random recipient" %}</h5>
+
+        <p><strong>{% trans "Sender" %}:</strong> {{ request.session.compose.sender }}</p>
+        <p><strong>{% trans "Recipient" %}:</strong> {{ random_recipient }}</p>
+        <p><strong>{% trans "Subject" %}:</strong> {{ preview_subject }}</p>
+        <p><strong>{% trans "Text Message" %}:</strong></p>
+        <div class="preview">
+            {{ preview_txt_msg }}
+        </div>
+        <p><strong>{% trans "HTML Message" %}:</strong></p>
+        <div class="preview">
+            {{ preview_html_msg }}
+        </div>
+    </section>
+
+    <section class="smtp">
+        <h3 class="w-100 text-center">{% trans "SMTP Details" %}</h3>
+        {% if request.session.mode == "google" %}
+        <p>{% trans "Sending through Google" %}</p>
+        {% else %}
+        <p><strong>{% trans "Hostname" %}:</strong> {{ request.session.smtp.host }}</p>
+        <p><strong>{% trans "Port" %}:</strong> {{ request.session.smtp.port }}</p>
+        <p><strong>{% trans "Username" %}:</strong> {{ request.session.smtp.username }}</p>
+        <p><strong>{% trans "Password" %}:</strong> &lt;Password not displayed&gt;</p>
+        <p><strong>{% trans "Use TLS" %}:</strong> {{ request.session.smtp.use_tls }}</p>
+        {% endif %}
+    </section>
+
+    <p><a href="{% url "send_mails" %}" class="btn btn-primary btn-lg btn-block">{% trans "Send" %}</a></p>
+
+</div>
+{% endblock %}

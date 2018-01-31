@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% load i18n static %}
+
+{% block title %}{% trans "Step 2: Compose Message" %}{% endblock %}
+
+{% block content %}
+{% include "header.html" %}
+
+<div class="compose_message_container">
+    <h1 class="display-6 text-center">{% trans "Compose Message" %}</h1>
+    <h3>{% trans "Note" %}</h3>
+    <ul>
+        <li>{% blocktrans %}The text and HTML message are rendered through <a href="https://docs.djangoproject.com/en/2.0/topics/templates/">django templates</a>{% endblocktrans %}</li>
+        <li>{% blocktrans %}All the CSV columns from Step 1 are available as <a href="https://docs.djangoproject.com/en/2.0/ref/templates/language/">django template variables</a>{% endblocktrans %}</li>
+        <li>{% blocktrans %}For e.g: A header called "e-mail" is transformed into "e_mail". "First Name" is converted into "first_name". These headers can be dynamically substituted in the subject, text message and html message {% endblocktrans %}</li>
+        <li>{% trans "For e.g:" %}{% verbatim %}"Hello {{ first_name }}"{% endverbatim %} {% blocktrans %}gets substituted as "Hello User" for a text "User" under the "first_name" column{% endblocktrans %}</li>
+    </ul>
+    <form method="post" action="{% url "compose_message" %}" class="needs-validation">{% csrf_token %}
+        <div class="col-md-12 mb-3">
+            <label for="sender"><strong>{% trans "Sender" %}</strong></label>
+            <input type="email" class="form-control {% if form.errors.sender %}is-invalid{% endif %}" id="sender" required="" placeholder="Sender's email address" name="sender" {% if form.sender.value %}value="{{ form.sender.value }}"{% endif %}>
+            <div class="invalid-feedback">
+                {% if form.errors.sender %}
+                {{ form.errors.sender }}
+                {% else %}
+                {% trans "A sender's email address is required" %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-12 mb-3">
+            <label for="subject"><strong>{% trans "Subject" %}</strong></label>
+            <input type="text" class="form-control {% if form.errors.subject %}is-invalid{% endif %}" id="subject" required="" placeholder="Subject" name="subject" {% if form.subject.value %}value="{{ form.subject.value }}"{% endif %}>
+            <div class="invalid-feedback">
+                {% if form.errors.subject %}
+                {{ form.errors.subject }}
+                {% else %}
+                {% trans "A subject is required" %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-12 mb-3">
+            <label for="text_msg"><strong>{% trans "Text Message" %}</strong></label>
+            <small class="bg-info">(Optional) For older email clients that cannot handle HTML emails</small>
+            <textarea class="form-control {% if form.errors.txt_msg %}is-invalid{% endif %}" id="text_msg" placeholder="Message here..." name="txt_msg">{% if form.txt_msg.value %}{{ form.txt_msg.value }}{% endif %}</textarea>
+            <div class="invalid-feedback">
+                {{ form.errors.txt_msg }}
+            </div>
+        </div>
+        <div class="col-md-12 mb-3">
+            <label for="html_msg"><strong>{% trans "HTML Message" %}</strong></label>
+            <small class="bg-info">Enter raw HTML. Use django variables and tags to represent dynamic content in your message</small>
+            <textarea class="form-control {% if form.errors.html_msg %}is-invalid{% endif %}" id="html_msg" placeholder="HTML Message here..." name="html_msg">{% if form.html_msg.value %}{{ form.html_msg.value }}{% endif %}</textarea>
+            <div class="invalid-feedback">
+                {{ form.errors.html_msg }}
+            </div>
+        </div>
+        <div class="col-md-12 mb-3">
+            <label for="preview"><strong>{% trans "Preview" %}</strong></label>
+            <div class="preview" id="preview">
+            </div>
+        </div>
+        <p><input type="submit" value="{% trans "Next" %} &gt;&gt;" class="btn btn-primary btn-lg btn-block" /></p>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+ (function() {
+     var ta = document.querySelector('#html_msg');
+     var pa = document.querySelector('#preview');
+     ta.addEventListener('keydown', function() {
+         var $this = this;
+         preview.innerHTML = $this.value;
+     }, false);
+     ta.dispatchEvent(new Event('keydown'));
+ })();
+</script>
+{% endblock %}
