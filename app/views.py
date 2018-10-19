@@ -248,7 +248,7 @@ def send_mails_smtp(request):
             'session': request.session,
             'mode': 'smtp',
         }
-        queue.enqueue(send_msg, **kwargs, ttl=100)
+        queue.enqueue(send_msg, ttl=100, **kwargs)
 
 
 def send_msg(**kwargs):
