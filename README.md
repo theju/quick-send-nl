@@ -33,7 +33,7 @@ add and fill the following attribute in the `server/local.py`
    ```
 4. Run the `rqworker` command to run the background queue (from the top-level project directory):
    ```
-   DJANGO_SETTINGS_MODULE=server.settings rqworker --queue-class=app.utils.DjQueue --job-class=app.utils.DjJob
+   DJANGO_SETTINGS_MODULE=server.settings rqworker --name <name_of_top_level_folder> --queue-class=app.utils.DjQueue --job-class=app.utils.DjJob
    ```
 5. It is highly recommended that you create a new `SECRET_KEY` in your `server/local.py`.
 

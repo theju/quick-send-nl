@@ -1,3 +1,4 @@
+import os
 import time
 import base64
 import random
@@ -225,7 +226,7 @@ def google_oauth_access_token(request):
 
 
 def send_mails_google(request):
-    queue = DjQueue()
+    queue = DjQueue(os.path.basename(settings.BASE_DIR))
 
     for (idx, row) in enumerate(request.session['csv']):
         kwargs = {
