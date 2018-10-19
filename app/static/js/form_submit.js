@@ -1,6 +1,6 @@
 (function() {
     var form = document.querySelector('form.needs-validation');
-    form.addEventListener('submit', function(event) {
+    form && form.addEventListener('submit', function(event) {
         if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();

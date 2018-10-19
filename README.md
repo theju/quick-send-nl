@@ -14,9 +14,9 @@ are sent out.
 
 ## Installation
 
-1. Install the requirements listed in the `requirements.txt`.
+1. Install the dependencies using `pipenv`_.
 2. (Optional) If you plan to support sending emails through Google,
-add the following attribute in the `server/local.py`
+add and fill the following attribute in the `server/local.py`
    ```
    GOOGLE_OAUTH = {
        'CLIENT_ID': '...',
