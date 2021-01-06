@@ -24,7 +24,6 @@ from django.http import HttpResponseRedirect, HttpResponseBadRequest
 
 from .forms import UploadCSVForm, ComposeMessageForm, ModeForm, \
     GoogleOAuthForm, SMTPForm
-from .utils import DjQueue
 
 
 def index(request):
@@ -226,7 +225,10 @@ def google_oauth_access_token(request):
 
 
 def send_mails_google(request):
-    queue = DjQueue(os.path.basename(settings.BASE_DIR))
+    queue = rq.Queue(
+        name=os.path.basename(settings.BASE_DIR),
+        connection=redis.Redis(**settings.REDIS)
+    )
 
     for (idx, row) in enumerate(request.session['csv']):
         kwargs = {
@@ -239,7 +241,10 @@ def send_mails_google(request):
 
 
 def send_mails_smtp(request):
-    queue = DjQueue()
+    queue = rq.Queue(
+        name=os.path.basename(settings.BASE_DIR),
+        connection=redis.Redis(**settings.REDIS)
+    )
 
     for (idx, row) in enumerate(request.session['csv']):
         kwargs = {
