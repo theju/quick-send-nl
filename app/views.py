@@ -310,10 +310,8 @@ def send_msg(**kwargs):
     status += _('Sent mail to {0}'.format(recipient)) + '\r\n'
 
     if idx + 1 == total_emails:
-        queue = Queue(
-            name=os.path.basename(settings.BASE_DIR),
-            connection=redis.Redis(**settings.REDIS)
-        )
+        queue_name = os.path.basename(settings.BASE_DIR)
+        queue = django_rq.get(queue_name)
         queue.enqueue(delete_session, session_id)
         status = True
     return status
