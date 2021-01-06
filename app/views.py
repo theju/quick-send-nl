@@ -311,7 +311,7 @@ def send_msg(**kwargs):
 
     if idx + 1 == total_emails:
         queue_name = os.path.basename(settings.BASE_DIR)
-        queue = django_rq.get(queue_name)
+        queue = django_rq.get_queue(queue_name)
         queue.enqueue(delete_session, session_id)
         status = True
     return status
