@@ -5,6 +5,7 @@ import random
 
 import rq
 import redis
+import django_rq
 import requests
 
 from urllib.parse import urlencode
@@ -225,11 +226,8 @@ def google_oauth_access_token(request):
 
 
 def send_mails_google(request):
-    queue = rq.Queue(
-        name=os.path.basename(settings.BASE_DIR),
-        connection=redis.Redis(**settings.REDIS)
-    )
-
+    queue_name = os.path.basename(settings.BASE_DIR)
+    queue = django_rq.get_queue(queue_name)
     for (idx, row) in enumerate(request.session['csv']):
         kwargs = {
             'idx': idx,
@@ -241,10 +239,8 @@ def send_mails_google(request):
 
 
 def send_mails_smtp(request):
-    queue = rq.Queue(
-        name=os.path.basename(settings.BASE_DIR),
-        connection=redis.Redis(**settings.REDIS)
-    )
+    queue_name = os.path.basename(settings.BASE_DIR)
+    queue = django_rq.get_queue(queue_name)
 
     for (idx, row) in enumerate(request.session['csv']):
         kwargs = {

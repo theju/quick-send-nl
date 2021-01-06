@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_rq',
+
     'app',
 ]
 
@@ -133,7 +135,23 @@ FILE_UPLOAD_HANDLERS = [
 REDIS = {
     'host': 'localhost',
     'port': 6379,
+    'db': 0,
     'password': ''
+}
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': REDIS['host'],
+        'PORT': REDIS['port'],
+        'PASSWORD': REDIS['password'],
+        'DB': REDIS['db'],
+    },
+    os.path.basename(BASE_DIR): {
+        'HOST': REDIS['host'],
+        'PORT': REDIS['port'],
+        'PASSWORD': REDIS['password'],
+        'DB': REDIS['db'],
+    }
 }
 
 try:
